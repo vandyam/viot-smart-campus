@@ -1,0 +1,271 @@
+﻿gpio_init()
+Prototype
+void gpio_init(GPIO_TypeDef *GPIOx, uint32_t pin, gpio_mode_t mode);
+Parameters
+* GPIOx → GPIO port (e.g., GPIOA, GPIOB)
+* pin → Pin number (e.g., GPIO_PIN_5)
+* mode → Pin mode
+   * GPIO_MODE_OUTPUT_PP_LOW
+   * GPIO_MODE_INPUT_PULL_DOWN
+   * GPIO_MODE_ANALOG
+What it does
+Initializes a GPIO pin with the specified mode.
+Example
+gpio_init(GPIOA, GPIO_PIN_15, GPIO_MODE_OUTPUT_PP_LOW);
+________________
+
+
+gpio_set_iomux()
+Prototype
+void gpio_set_iomux(GPIO_TypeDef *GPIOx, uint32_t pin, uint8_t function);
+Parameters
+* GPIOx → GPIO port
+* pin → Pin number
+* function → Alternate function number
+What it does
+Configures pin alternate function (used for UART, SPI, etc.).
+Example
+gpio_set_iomux(GPIOA, GPIO_PIN_8, 1);
+________________
+
+
+________________
+gpio_read()
+Prototype
+gpio_level_t gpio_read(GPIO_TypeDef *GPIOx, uint32_t pin);
+Parameters
+* GPIOx → GPIO port
+* pin → Pin number
+What it does
+Reads the current logic level of the GPIO pin.
+Example
+if (gpio_read(GPIOA, GPIO_PIN_8) == GPIO_LEVEL_LOW)
+________________
+
+
+gpio_write()
+Prototype
+void gpio_write(GPIO_TypeDef *GPIOx, uint32_t pin, gpio_level_t level);
+Parameters
+* GPIOx → GPIO port
+* pin → Pin number
+* level
+   * GPIO_LEVEL_LOW
+   * GPIO_LEVEL_HIGH
+What it does
+Sets output pin to HIGH or LOW.
+Example
+gpio_write(GPIOA, GPIO_PIN_15, GPIO_LEVEL_HIGH);
+________________
+
+
+
+________________
+✅ ADC APIs Used
+________________
+
+
+rcc_set_adc_clk_source()
+Prototype
+void rcc_set_adc_clk_source(rcc_adc_clk_source_t source);
+Parameters
+* source → ADC clock source
+(e.g., RCC_ADC_CLK_SOURCE_RCO48M)
+
+What it does
+Selects clock source for ADC peripheral.
+Example
+rcc_set_adc_clk_source(RCC_ADC_CLK_SOURCE_RCO48M);
+________________
+
+
+rcc_enable_peripheral_clk()
+Prototype
+void rcc_enable_peripheral_clk(rcc_peripheral_t peripheral, bool enable);
+Parameters
+   * peripheral → Peripheral name
+(e.g., RCC_PERIPHERAL_ADC)
+   * enable
+      * true → Enable clock
+      * false → Disable clock
+What it does
+Enables or disables clock for a peripheral.
+Example
+rcc_enable_peripheral_clk(RCC_PERIPHERAL_ADC, true);
+________________
+
+
+________________
+adc_init()
+Prototype
+void adc_init(void);
+Parameters
+      * None
+What it does
+Initializes ADC with default configuration.
+Example
+adc_init();
+________________
+
+
+adc_config_clock_division()
+Prototype
+void adc_config_clock_division(uint32_t clock_division);
+Parameters
+      * clock_division → ADC clock divider
+What it does
+Sets ADC clock division factor.
+Example
+adc_config_clock_division(20);
+________________
+
+
+adc_config_sample_sequence()
+Prototype
+void adc_config_sample_sequence(uint8_t seq, uint8_t channel);
+Parameters
+      * seq → Sequence number
+      * channel → ADC channel number
+What it does
+Defines which ADC channel is sampled.
+Example
+adc_config_sample_sequence(0, 3);
+________________
+
+
+adc_config_conv_mode()
+Prototype
+void adc_config_conv_mode(adc_conv_mode_t mode);
+Parameters
+      * mode
+      * ADC_CONV_MODE_CONTINUE
+      * ADC_CONV_MODE_SINGLE
+What it does
+Selects single or continuous conversion mode.
+Example
+adc_config_conv_mode(ADC_CONV_MODE_CONTINUE);
+________________
+
+
+adc_enable()
+Prototype
+void adc_enable(bool enable);
+What it does
+Enables or disables ADC module.
+Example
+adc_enable(true);
+________________
+
+
+adc_start()
+Prototype
+void adc_start(bool start);
+What it does
+Starts or stops ADC conversion.
+________________
+Example
+adc_start(true);
+________________
+
+
+adc_get_interrupt_status()
+Prototype
+bool adc_get_interrupt_status(adc_isr_t flag);
+What it does
+Checks whether the ADC interrupt flag (e.g., EOC) is set.
+Example
+while(!adc_get_interrupt_status(ADC_ISR_EOC));
+________________
+
+
+adc_get_data()
+Prototype
+uint16_t adc_get_data(void);
+What it does
+Returns converted ADC value.
+Example
+adc_data_1[i] = adc_get_data();
+________________
+
+
+________________
+✅ UART APIs Used
+________________
+uart_config_init()
+Prototype
+void uart_config_init(uart_config_t *config);
+Parameters
+      * config → Pointer to UART configuration structure
+What it does
+Initializes UART configuration structure with default values.
+Example
+uart_config_init(&uart_config);
+________________
+
+
+uart_init()
+Prototype
+int uart_init(UART_TypeDef *UARTx, uart_config_t *config);
+Parameters
+      * UARTx → UART instance (e.g., UART2)
+      * config → Pointer to configuration structure
+
+What it does
+Initializes UART with given configuration.
+Example
+uart_init(UART2, &uart_config);
+________________
+
+
+uart_cmd()
+Prototype
+void uart_cmd(UART_TypeDef *UARTx, bool enable);
+
+
+What it does
+Enables or disables UART module.
+Example
+uart_cmd(UART2, true);
+________________
+
+
+uart_send_data()
+Prototype
+void uart_send_data(UART_TypeDef *UARTx, uint8_t data);
+What it does
+Transmits one byte through UART.
+Example
+uart_send_data(UART2, 0x01);
+________________
+uart_receive_data()
+Prototype
+uint8_t uart_receive_data(UART_TypeDef *UARTx);
+What it does
+Reads one received byte from UART.
+Example
+char c = uart_receive_data(UART2);
+________________
+uart_get_flag_status()
+Prototype
+FlagStatus uart_get_flag_status(UART_TypeDef *UARTx, uart_flag_t flag);
+Parameters
+         * flag
+         * UART_FLAG_RX_FIFO_EMPTY
+What it does
+Checks UART status flag.
+Example
+uart_get_flag_status(UART2, UART_FLAG_RX_FIFO_EMPTY);
+________________
+✅ Delay API Used
+________________
+
+
+delay_ms()
+Prototype
+void delay_ms(uint32_t ms);
+Parameters
+         * ms → Delay in milliseconds
+What it does
+Creates blocking delay for specified time.
+Example
+delay_ms(100);
